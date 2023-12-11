@@ -16,7 +16,7 @@ const Pricing = lazy(() => import("./pages/Pricing"));
 const Homepage = lazy(() => import("./pages/Homepage"));
 const PageNotFound = lazy(() => import("./pages/PageNotFound"));
 const Login = lazy(() => import("./pages/Login"));
-const AppLAyout = lazy(() => import("./pages/AppLayout"));
+const AppLayout = lazy(() => import("./pages/AppLayout"));
 
 import ProtectedRoute from "./pages/ProtectedRoute";
 
@@ -31,7 +31,7 @@ export default function App() {
               <Route path="product" element={<Product />} />
               <Route path="pricing" element={<Pricing />} />
               <ProtectedRoute>
-                <Route path="app" element={<AppLAyout />}>
+                <Route path="app" element={<AppLayout />}>
                   <Route index element={<Navigate replace to="cities" />} />
                   <Route path="cities" element={<CityList />} />
                   <Route path="cities/:id" element={<City />} />
