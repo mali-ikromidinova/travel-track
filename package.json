@@ -11,6 +11,7 @@
     "server": "json-server --watch data/cities.json --port 9000"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.39.3",
     "json-server": "^0.17.4",
     "leaflet": "^1.9.4",
     "react": "^18.2.0",

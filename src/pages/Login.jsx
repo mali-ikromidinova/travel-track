@@ -7,8 +7,9 @@ import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   // PRE-FILL FOR DEV PURPOSES
-  const [email, setEmail] = useState("jack@example.com");
+  const [email, setEmail] = useState("mali@example.com");
   const [password, setPassword] = useState("qwerty");
+
   const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
@@ -26,9 +27,9 @@ export default function Login() {
   );
 
   return (
-    <main className={styles.login} onSubmit={handleSubmit}>
+    <main className={styles.login}>
       <PageNav />
-      <form className={styles.form}>
+      <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.row}>
           <label htmlFor="email">Email address</label>
           <input

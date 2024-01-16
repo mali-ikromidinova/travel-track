@@ -4,15 +4,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUrlPosition } from "../hooks/useUrlPosition";
+import { useCities } from "../context/CitiesContext";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import styles from "./Form.module.css";
 import Button from "./Button";
 import Message from "./Message";
 import Spinner from "./Spinner";
-import { useCities } from "../context/CitiesContext";
 
-export function convertToEmoji(countryCode) {
+function convertToEmoji(countryCode) {
   const codePoints = countryCode
     .toUpperCase()
     .split("")
@@ -24,28 +24,32 @@ const URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";
 
 function Form() {
   const navigate = useNavigate();
-  const [mapLat, mapLng] = useUrlPosition();
+  const [lat, lng] = useUrlPosition();
   const { createCity, isLoading } = useCities();
 
   const [cityName, setCityName] = useState("");
   const [country, setCountry] = useState("");
   const [date, setDate] = useState(new Date());
   const [notes, setNotes] = useState("");
+  const [emoji, setEmoji] = useState("");
   const [isLoadingGeocoding, setIsLoadingGeocoding] = useState(false);
   const [geoCodingError, setGeocodingError] = useState("");
 
   useEffect(
     function () {
-      if (!mapLat && !mapLng) return;
+      if (!lat && !lng) {
+        console.log("returning from form");
+        return;
+      }
 
       async function fetchCityData() {
         try {
+          // console.log(lat, lng);
           setIsLoadingGeocoding(true);
           setGeocodingError("");
-          const res = await fetch(
-            `${URL}?latitude=${mapLat}&longtitude=${mapLng}`
-          );
-          const data = res.json();
+          const res = await fetch(`${URL}?latitude=${lat}&longitude=${lng}`);
+          const data = await res.json();
+          // console.log(data);
 
           if (!data.countryCode)
             throw new Error(
@@ -54,6 +58,7 @@ function Form() {
 
           setCityName(data.city || data.locality || "");
           setCountry(data.countryName);
+          // setEmoji(convertToEmoji(data.countryCode));
         } catch (err) {
           setGeocodingError(err.message);
         } finally {
@@ -62,7 +67,7 @@ function Form() {
       }
       fetchCityData();
     },
-    [mapLat, mapLng]
+    [lat, lng]
   );
 
   async function handleSubmit(e) {
@@ -71,12 +76,12 @@ function Form() {
     if (!cityName || !date) return;
 
     const newCity = {
+      date,
       cityName,
       country,
-      // emoji,
-      date,
       notes,
-      position: { mapLat, mapLng },
+      latitude: lat,
+      longitude: lng,
     };
 
     await createCity(newCity);
@@ -85,7 +90,7 @@ function Form() {
 
   if (isLoadingGeocoding) return <Spinner />;
 
-  if (!mapLat && !mapLng)
+  if (!lat && !lng)
     return <Message message={"Start by clicking somewhere on the map"} />;
 
   if (geoCodingError) return <Message message={geoCodingError} />;

@@ -15,7 +15,9 @@ const formatDate = (date) =>
 
 function City() {
   const { id } = useParams();
+  console.log("city from params", id);
   const { getCity, currentCity, isLoading } = useCities();
+  console.log("current city in city file", currentCity);
 
   const navigate = useNavigate();
 
@@ -23,7 +25,7 @@ function City() {
     function () {
       getCity(id);
     },
-    [id]
+    [id, getCity]
   );
 
   const { cityName, emoji, date, notes } = currentCity;

@@ -30,15 +30,20 @@ export default function App() {
               <Route index element={<Homepage />} />
               <Route path="product" element={<Product />} />
               <Route path="pricing" element={<Pricing />} />
-              <ProtectedRoute>
-                <Route path="app" element={<AppLayout />}>
-                  <Route index element={<Navigate replace to="cities" />} />
-                  <Route path="cities" element={<CityList />} />
-                  <Route path="cities/:id" element={<City />} />
-                  <Route path="countries" element={<CountryList />} />
-                  <Route path="form" element={<Form />} />
-                </Route>
-              </ProtectedRoute>
+              <Route
+                path="app"
+                element={
+                  <ProtectedRoute>
+                    <AppLayout />
+                  </ProtectedRoute>
+                }
+              >
+                <Route index element={<Navigate replace to="cities" />} />
+                <Route path="cities" element={<CityList />} />
+                <Route path="cities/:id" element={<City />} />
+                <Route path="countries" element={<CountryList />} />
+                <Route path="form" element={<Form />} />
+              </Route>
               <Route path="login" element={<Login />} />
               <Route path="*" element={<PageNotFound />} />
             </Routes>

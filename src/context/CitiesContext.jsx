@@ -2,19 +2,19 @@
 /* eslint-disable no-unused-vars */
 import {
   createContext,
-  useState,
   useEffect,
   useContext,
   useReducer,
   useCallback,
 } from "react";
+import supabase from "../services/supabase";
 
 const URL = "http://localhost:9000";
 
 const CitiesContext = createContext();
 
 const initialState = {
-  cities: [],
+  cities: {},
   isLoading: false,
   currentCity: {},
   error: "",
@@ -75,17 +75,23 @@ function CitiesProvider({ children }) {
   );
 
   useEffect(function () {
-    async function fetchCities() {
+    async function getCities() {
       dispatch({ type: "loading" });
       try {
-        const res = await fetch(`${URL}/cities`);
-        const data = await res.json();
+        let { data } = await supabase.from("cities").select("*");
+
         dispatch({ type: "cities/loaded", payload: data });
+        // console.log(data[0].idDatabase);
+        // console.log("data", data);
+        // console.log("data first", data[0]);
+        // // console.log("data type", typeof data);
+        // // console.log("data first type", typeof data[0]);
       } catch {
         dispatch({ type: "rejected", payload: "error in loading cities" });
+        throw new Error("Cities could not be loaded");
       }
     }
-    fetchCities();
+    getCities();
   }, []);
 
   const getCity = useCallback(
@@ -93,12 +99,19 @@ function CitiesProvider({ children }) {
       if (Number(id) === currentCity.id) return;
 
       dispatch({ type: "loading" });
+
       try {
-        const res = await fetch(`${URL}/cities/${id}`);
-        const data = await res.json();
+        const { data } = await supabase
+          .from("cities")
+          .select("*")
+          .eq("id", id)
+          .single();
+
         dispatch({ type: "city/loaded", payload: data });
-      } catch {
+      } catch (error) {
+        console.error(error);
         dispatch({ type: "rejected", payload: "error in loading city" });
+        throw new Error("City not found");
       }
     },
     [currentCity.id]
@@ -107,27 +120,22 @@ function CitiesProvider({ children }) {
   async function createCity(newCity) {
     dispatch({ type: "loading" });
     try {
-      const res = await fetch(`${URL}/cities/`, {
-        method: "POST",
-        body: JSON.stringify(newCity),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await res.json();
-      dispatch({ type: "cities/created", data });
-    } catch {
-      dispatch({ type: "rejected", payload: "error in loading data" });
+      const { data } = await supabase.from("cities").insert(newCity).select();
+
+      dispatch({ type: "cities/created", payload: data[0] });
+    } catch (error) {
+      console.error(error);
+      dispatch({ type: "rejected", payload: "error in creating city" });
+      throw new Error("City not added");
     }
   }
 
   async function deleteCity(id) {
     dispatch({ type: "loading" });
     try {
-      const res = await fetch(`${URL}/cities/${id}`, {
-        method: "DELETE",
-      });
-      dispatch({ type: "cities/deleted", id });
+      const { data } = await supabase.from("cities").delete().eq("id", id);
+      dispatch({ type: "cities/deleted", payload: id });
+      return data;
     } catch {
       dispatch({ type: "rejected", payload: "error in loading data" });
     }

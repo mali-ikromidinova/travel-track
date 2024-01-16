@@ -13,6 +13,7 @@ export function useGeolocation(defaultPosition = null) {
     setIsLoading(true);
     navigator.geolocation.getCurrentPosition(
       (pos) => {
+        console.log("pos", pos);
         setPosition({
           lat: pos.coords.latitude,
           lng: pos.coords.longitude,
@@ -21,6 +22,7 @@ export function useGeolocation(defaultPosition = null) {
       },
       (error) => {
         setError(error.message);
+        console.log("error in useGeolocation");
         setIsLoading(false);
       }
     );

@@ -35,6 +35,29 @@
         "lng": 13.376933665713324
       },
       "id": 98443197
+    },
+    {
+      "cityName": "London",
+      "country": "United Kingdom of Great Britain and Northern Ireland (the)",
+      "date": "2024-01-12T09:51:21.237Z",
+      "notes": "",
+      "position": {
+        "lat": "51.536085601784755",
+        "lng": "0.29663085937500006"
+      },
+      "id": 98443198
+    },
+    {
+      "cityName": "Casas de los Pinos",
+      "country": "Spain",
+      "emoji": "🇪🇸",
+      "date": "2024-01-12T10:30:09.539Z",
+      "notes": "",
+      "position": {
+        "lat": "39.317300373271024",
+        "lng": "-2.39501953125"
+      },
+      "id": 98443199
     }
   ]
 }

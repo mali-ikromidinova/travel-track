@@ -17,14 +17,14 @@ export default function CountryList() {
 
   const countries = cities.reduce((arr, city) => {
     if (!arr.map((el) => el.country).includes(city.county))
-      return [...arr, { country: city.country, emoji: city.emoji }];
+      return [...arr, { country: city.country }];
     else return arr;
   }, []);
 
   return (
     <ul className={styles.countryList}>
       {countries.map((country) => (
-        <CountryItem country={country} key={country.id} />
+        <CountryItem country={country} key={country.country + Math.random()} />
       ))}
     </ul>
   );
