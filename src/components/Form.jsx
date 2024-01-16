@@ -44,12 +44,10 @@ function Form() {
 
       async function fetchCityData() {
         try {
-          // console.log(lat, lng);
           setIsLoadingGeocoding(true);
           setGeocodingError("");
           const res = await fetch(`${URL}?latitude=${lat}&longitude=${lng}`);
           const data = await res.json();
-          // console.log(data);
 
           if (!data.countryCode)
             throw new Error(
@@ -58,7 +56,6 @@ function Form() {
 
           setCityName(data.city || data.locality || "");
           setCountry(data.countryName);
-          // setEmoji(convertToEmoji(data.countryCode));
         } catch (err) {
           setGeocodingError(err.message);
         } finally {

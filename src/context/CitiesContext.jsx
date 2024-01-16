@@ -9,8 +9,6 @@ import {
 } from "react";
 import supabase from "../services/supabase";
 
-const URL = "http://localhost:9000";
-
 const CitiesContext = createContext();
 
 const initialState = {
@@ -81,11 +79,6 @@ function CitiesProvider({ children }) {
         let { data } = await supabase.from("cities").select("*");
 
         dispatch({ type: "cities/loaded", payload: data });
-        // console.log(data[0].idDatabase);
-        // console.log("data", data);
-        // console.log("data first", data[0]);
-        // // console.log("data type", typeof data);
-        // // console.log("data first type", typeof data[0]);
       } catch {
         dispatch({ type: "rejected", payload: "error in loading cities" });
         throw new Error("Cities could not be loaded");

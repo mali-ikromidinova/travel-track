@@ -19,9 +19,7 @@ import Button from "./Button";
 
 function Map() {
   const { cities } = useCities();
-  const [mapPosition, setMapPosition] = useState([
-    41.3108238809182, 69.35668945312501,
-  ]);
+  const [mapPosition, setMapPosition] = useState([41, 0]);
 
   const {
     isLoading: isLoadingPosition,
@@ -34,10 +32,6 @@ function Map() {
     function () {
       if (lat && lng) {
         setMapPosition([Number(lat), Number(lng)]);
-        console.log("lat, lng", lat, lng);
-        // console.log("everything ok with lat, lng");
-      } else {
-        // console.log("useEffect set map failed");
       }
     },
     [lat, lng]
@@ -50,10 +44,6 @@ function Map() {
           Number(geolocationPosition.lat),
           Number(geolocationPosition.lng),
         ]);
-        console.log(geolocationPosition);
-        // console.log("everything ok with geolocationPos");
-      } else {
-        // console.log("SetMapPosition failed");
       }
     },
     [geolocationPosition]
@@ -77,14 +67,13 @@ function Map() {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
         />
-        {/* {cities.map((city) => (
+        {cities.map((city) => (
           <Marker position={[city.latitude, city.longitude]} key={city.id}>
-           
             <Popup>
               <span>{city.emoji}</span> <span>{city.cityName}</span>
             </Popup>
           </Marker>
-        ))} */}
+        ))}
 
         <ChangeCenter position={mapPosition} />
         <DetectClick />

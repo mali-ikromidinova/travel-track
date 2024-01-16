@@ -20,10 +20,6 @@ export default function CityItem({ city }) {
   const { currentCity, deleteCity } = useCities();
   const { cityName, date, id, latitude, longitude } = city;
 
-  console.log(formatDate(date));
-  // console.log("currentCity", currentCity);
-  // console.log("city", city);
-
   function handleDelete(e) {
     e.preventDefault();
     deleteCity(id);
